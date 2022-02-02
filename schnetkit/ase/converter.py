@@ -36,17 +36,29 @@ class Converter:
 
         self.atoms = None
         self.neighborhood = None
+    
+    def capture_nl_construction_time(self, **kwargs):
+        return 'nl_construction_time' in kwargs and kwargs['nl_construction_time']
 
-    def __call__(self, atoms):
+    def __call__(self, atoms, **kwargs):
         if self.needs_update(atoms):
+            if self.capture_nl_construction_time(**kwargs):
+                start = time.monotonic()
+
             self.atoms = atoms.copy()
             self.neighborhood = self.get_neighborhood(self.atoms)
+
+            if self.capture_nl_construction_time(**kwargs):
+                nl_construction_time = time.monotonic() - start
 
         converter = AtomsConverter(
             environment_provider=FakeEnvironmentProvider(self.neighborhood),
             device=self.device,
         )
         inputs = converter(atoms)
+
+        if self.capture_nl_construction_time(**kwargs):
+           return Converted(inputs, self.neighborhood), nl_construction_time
 
         return Converted(inputs, self.neighborhood)
 
