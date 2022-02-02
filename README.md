@@ -1,3 +1,5 @@
+This is a fork of `schnetkit` for benchmarking `SchNetPack`'s neighbor list machinery.
+
 ## `schnetkit`
 ### some tooling for `schnetpack`
 
