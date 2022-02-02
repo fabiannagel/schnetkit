@@ -42,10 +42,11 @@ class Converter:
 
     def __call__(self, atoms, **kwargs):
         if self.needs_update(atoms):
+            self.atoms = atoms.copy()
+
             if self.capture_nl_construction_time(**kwargs):
                 start = time.monotonic()
 
-            self.atoms = atoms.copy()
             self.neighborhood = self.get_neighborhood(self.atoms)
 
             if self.capture_nl_construction_time(**kwargs):
