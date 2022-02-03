@@ -1,4 +1,5 @@
 import torch
+import time
 from collections import namedtuple
 from schnetpack.data.atoms import AtomsConverter
 from schnetpack.environment import AseEnvironmentProvider, BaseEnvironmentProvider
@@ -41,6 +42,8 @@ class Converter:
         return 'nl_construction_time' in kwargs and kwargs['nl_construction_time']
 
     def __call__(self, atoms, **kwargs):
+        nl_construction_time = None
+        
         if self.needs_update(atoms):
             self.atoms = atoms.copy()
 
